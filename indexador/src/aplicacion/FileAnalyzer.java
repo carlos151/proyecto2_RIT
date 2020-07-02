@@ -391,11 +391,6 @@ public class FileAnalyzer {
 		
 	}
 	
-	private static String stemText(String input) {
-		String resultado = "";
-		return resultado;
-	}
-	
 	private static String sacarSoloPalabras(String input) {
 		String pattern = "(?<=\\s|^)[A-Za-zÃ�Ã‰Ã�Ã“ÃšÃœÃ¡Ã©Ã­Ã³ÃºÃ¼Ã‘Ã±]*(?=[.,;:]?\\s|$)";
 	    Pattern r = Pattern.compile(pattern);

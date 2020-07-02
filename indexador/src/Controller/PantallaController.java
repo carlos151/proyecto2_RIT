@@ -94,17 +94,23 @@ public class PantallaController implements ActionListener,ListSelectionListener{
 		//if (vista.table.getSelectedRow() > -1) {
     	if(!e.getValueIsAdjusting()) {
     	// print first column value from selected row
-            System.out.println("Dato :"+vista.table.getValueAt(vista.table.getSelectedRow(), 0).toString()); 
+         //   System.out.println("Dato>> :"+vista.table.getValueAt(vista.table.getSelectedRow(), 0).toString()); 
+            System.out.println("********** DOCUMENTO SELECCIONADO **********"); 
+            System.out.println("TITULO: "+this.listaDocs.get(vista.table.getSelectedRow()).get("titulo"));
+            System.out.println("ENCABEZADO: "+this.listaDocs.get(vista.table.getSelectedRow()).get("encab"));
+            System.out.println("REFERENCIA: "+this.listaDocs.get(vista.table.getSelectedRow()).get("ref"));
+            System.out.println("TEXTO: "+this.listaDocs.get(vista.table.getSelectedRow()).get("texto"));
+            System.out.println("********************************************"); 
         }
 	}
     
     public void limpiarTabla() {
     	int fila = this.vista.modelTable.getRowCount();
-    	System.out.println("TAMANO TABLA"+fila);
+    	//System.out.println("TAMANO TABLA"+fila);
     	for(int i = 0 ; i < fila; i++) {
     		this.vista.modelTable.removeRow(0);
     	}
-    	System.out.println("TABLA LIMPIA");
+    	//System.out.println("TABLA LIMPIA");
     } 
     
     public void llenarTabla(String query) {

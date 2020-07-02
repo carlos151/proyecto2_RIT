@@ -42,13 +42,13 @@ public class Searcher {
 	//Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_46);
   
 	public static  ArrayList<Document> searchFile(String _queryString,String index,int _hitsPerPage) throws IOException, ParseException {
-		
+		System.out.println("********** INICIO DE LA BUSQUEDA **********"); 
 		String field = "texto";
 		String queries = null;
 		int repeat = 0;
 		boolean raw = false;
 		String queryString = _queryString;// stemming(_queryString);
-		System.out.print("Query : "+queryString+"\n");
+		//System.out.print("Query : "+queryString+"\n");
 		int hitsPerPage = _hitsPerPage;
 		IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
 		//IMPRIME LOS DATO INDEXADOS PRUEBA-----------------------------------------------
@@ -66,8 +66,8 @@ public class Searcher {
 		BufferedReader in = null;
 		QueryParser parser = new QueryParser("texto", analyzer);
 		Query query = parser.parse(queryString);
-		System.out.println("Searching for: " + query.toString(field));
-		System.out.println("Searching field for: " + query.toString());
+		System.out.println("Consulta: " + query.toString(field));
+		System.out.println("Busqueda por tipo: " + query.toString());
 		//********************************************************************************
 
 
@@ -75,6 +75,7 @@ public class Searcher {
 		ArrayList<Document> listTitle = new ArrayList<Document>();
 		listTitle = doSearch(searcher, query, hitsPerPage);    
 		reader.close();
+		System.out.println("********** FIN DE LA BUSQUEDA **********"); 
 		return listTitle;
 	}
 
@@ -84,26 +85,26 @@ public class Searcher {
 		listTitle.clear();//revisar
 		
 		TopDocs results = searcher.search(query, hitsPerPage);
-		System.out.println(" RESULT: "+results.scoreDocs.length);
+		//System.out.println(" RESULTADOS: "+results.scoreDocs.length);
 
 		ScoreDoc[] hits = results.scoreDocs;
 
 		int numTotalHits = results.totalHits;
-		System.out.println(numTotalHits + " total matching documents");
+		System.out.println(numTotalHits + " total de documentos encontrados");
 
 		int start = 0;
 		int end = Math.min(numTotalHits, hitsPerPage);
-		System.out.println("END: " + end);
+		//System.out.println("END: " + end);
 
 		for (int i = start; i < end; i++) {
 			Document doc = searcher.doc(hits[i].doc);
 			String title = doc.get("titulo");
 			if (title != null) {
 				listTitle.add(doc);
-				System.out.println((i+1) + ". TITULO : " + title);
+				//System.out.println((i+1) + ". TITULO : " + title);
 				String text = doc.get("texto");
 				if (text != null) {
-					System.out.println("   TEXTO : " + doc.get("texto"));
+					//System.out.println("   TEXTO : " + doc.get("texto"));
 				}
 			} else {
 				System.out.println((i+1) + ". " + "No path for this document");
