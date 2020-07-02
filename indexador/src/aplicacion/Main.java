@@ -4,8 +4,11 @@ import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
+import org.apache.lucene.document.Document;
 import org.apache.lucene.queryparser.classic.ParseException;
+import org.tartarus.snowball.ext.SpanishStemmer;
 
 import Controller.PantallaController;
 import View.Pantalla;
@@ -14,23 +17,32 @@ public class Main{
 
     public static void main(String[] args) throws IOException {
         
-    	String index = "C:\\Users\\Carlos\\eclipse-workspace1\\proyecto2_RIT-master\\indexador\\index";
     	
-        //FileAnalyzer.fillStopWords(); //crear la lista estatica de stopwords
+        FileAnalyzer.fillStopWords(); //crear la lista estatica de stopwords
         
-        //Indexer.createIndex(".\\archivos\\wiki-p1.txt");
-    	Pantalla frame= new Pantalla();;
+    	String indexp1 = ".\\indexp1";//".\\index"
+    	String indexp2 = ".\\indexp2";
+    	String indexg1 = ".\\indexg1";
+    	String indexg2 = ".\\indexg2";
+    	
+    	Indexer.createIndex(".\\archivos\\wiki-p1.txt",indexp1);
+    	Indexer.createIndex(".\\archivos\\wiki-p2.txt",indexp2);
+    	Indexer.createIndex(".\\archivos\\wiki-g1.txt",indexg1);
+    	Indexer.createIndex(".\\archivos\\wiki-g2.txt",indexg2);
+    	
+    	
+        Pantalla frame= new Pantalla();
+        
         PantallaController controller = new PantallaController(frame);
         frame.setVisible(true);
     	
-        
-        System.out.println("hola");
-        ArrayList<String> listTitle = new ArrayList<String>();
-        
+    	
+    	//System.out.println("STEMMER : ->>>"+FileAnalyzer.stemming("consultas caries ingeniero"));
+ /*
         try {
 			//Searcher.searchFile("ref:'tenistas de macedonia'");
         	//listTitle = Searcher.searchFile("magno AND superficie");
-        	listTitle = Searcher.searchFile("wikipedia", index);
+        	listTitle = Searcher.searchFile("wikipedia", index,20);
         	//Searcher.searchFile("amintas");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -38,23 +50,7 @@ public class Main{
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-        
-        for(int i = 0 ; i<listTitle.size(); i++ ) {
-        	System.out.print(i+1+") TITLE : " + listTitle.get(i)+"\n");
-        }
-        /*String title = FileAnalyzer.sacarTitle(html);
-        System.out.println("Title:" + title);
-        
-        String body = FileAnalyzer.sacarBody(html);
-        System.out.println("Body:" + body);
-        
-        String headers = FileAnalyzer.sacarHeaders(html);
-        System.out.println("Headers:" + headers);
-        
-        String refs = FileAnalyzer.sacarRefs(html);
-        System.out.println("Referencias:" + refs);*/
-        
+		}*/
         
     }
 }

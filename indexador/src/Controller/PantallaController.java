@@ -1,15 +1,17 @@
 package Controller;
 
-import java.awt.Button;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.lucene.document.Document;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 import View.Pantalla;
@@ -17,18 +19,14 @@ import aplicacion.Searcher;
 
 public class PantallaController implements ActionListener,ListSelectionListener{
 	private Pantalla vista;
-	private ArrayList<String> lista;	
+	private ArrayList<Document> listaDocs;	
 	
-	String index = "C:.\\index";
+	String index = ".\\\\indexp1";//"C:.\\index"
 	
-	String indexp1 = "C:.\\index";
-	String indexp2 = "C:.\\index";
-	String indexg1 = "C:.\\index";
-	String indexg2 = "C:.\\index";
-	
-	
-	
-	
+	String indexp1 = ".\\indexp1";//".\\index"
+	String indexp2 = ".\\indexp2";
+	String indexg1 = ".\\indexg1";
+	String indexg2 = ".\\indexg2";
 	
 	public PantallaController(Pantalla _vista) {
 		this.vista=_vista;
@@ -38,6 +36,7 @@ public class PantallaController implements ActionListener,ListSelectionListener{
     
     public void _init_(){
     	vista.btnSearch.addActionListener(this);
+    	vista.btnExtendedSearch.addActionListener(this);
         vista.chckbxWikig1.addActionListener(this);
         vista.chckbxWikig2.addActionListener(this);
         vista.chckbxWikip1.addActionListener(this);
@@ -48,7 +47,6 @@ public class PantallaController implements ActionListener,ListSelectionListener{
         
         
         vista.table.setSelectionModel(vista.listSelectionModel);
-            
     }
 	
     @Override
@@ -57,6 +55,10 @@ public class PantallaController implements ActionListener,ListSelectionListener{
         	String query = vista.textSearch.getText();
         	limpiarTabla();
         	llenarTabla(query);
+        }else if (e.getSource() ==vista.btnExtendedSearch){
+        	String query = vista.textSearch.getText();
+        	limpiarTabla();
+        	extenderTabla(query);
         }else if (e.getSource() == vista.chckbxWikig1) {
         	 index = indexg1;
         	// vista.chckbxWikig1.setSelected(true);
@@ -81,7 +83,8 @@ public class PantallaController implements ActionListener,ListSelectionListener{
             vista.chckbxWikig2.setSelected(false);
             vista.chckbxWikip1.setSelected(false);
            // vista.chckbxWikip2.setSelected(true);
-        	
+        }else{
+        	System.out.println("ACTION LISTENER");
         }
     }
     
@@ -89,37 +92,25 @@ public class PantallaController implements ActionListener,ListSelectionListener{
 	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
 		//if (vista.table.getSelectedRow() > -1) {
-            // print first column value from selected row
-            System.out.println("Dato :"+vista.table.getValueAt(vista.table.getSelectedRow(), 0).toString());
-        //}
+    	if(!e.getValueIsAdjusting()) {
+    	// print first column value from selected row
+            System.out.println("Dato :"+vista.table.getValueAt(vista.table.getSelectedRow(), 0).toString()); 
+        }
 	}
     
     public void limpiarTabla() {
     	int fila = this.vista.modelTable.getRowCount();
-    	System.out.print("TAMANO TABLA"+fila);
+    	System.out.println("TAMANO TABLA"+fila);
     	for(int i = 0 ; i < fila; i++) {
     		this.vista.modelTable.removeRow(0);
     	}
-    	System.out.print("TABLA LIMPIA");
+    	System.out.println("TABLA LIMPIA");
     } 
     
-    public String elegirTxt() {
-    	
-    	
-    	
-    	
-    	
-    	return "hola";
-    }
-    
-    public void validarCheck() {
-    	
-    }
-	
-	public void llenarTabla(String query) {
+    public void llenarTabla(String query) {
 		
 		try {
-			this.lista = Searcher.searchFile(query,index);
+			this.listaDocs = Searcher.searchFile(query,index,20);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -129,16 +120,34 @@ public class PantallaController implements ActionListener,ListSelectionListener{
 		}
 		String []info = new String[1];
 		
-		for( int i = 0; i < this.lista.size(); i++ ) {
-			info[0]=this.lista.get(i);
+		for( int i = 0; i < this.listaDocs.size(); i++ ) {
+			info[0]=String.valueOf(i+1)+") "+this.listaDocs.get(i).get("titulo");
+			// doc.get("texto")
 			this.vista.modelTable.addRow(info);
 		}
 		
 		this.vista.table.setModel(this.vista.modelTable);
 	}
-
-	
-	
-	
-	
+    
+    
+public void extenderTabla(String query) {
+		try {
+			this.listaDocs = Searcher.searchFile(query,index,40);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String []info = new String[1];
+		
+		for( int i = 0; i < this.listaDocs.size(); i++ ) {
+			info[0]=String.valueOf(i+1)+") "+this.listaDocs.get(i).get("titulo");
+			// doc.get("texto")
+			this.vista.modelTable.addRow(info);
+		}
+		
+		this.vista.table.setModel(this.vista.modelTable);
+	}
 }

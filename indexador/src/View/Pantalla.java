@@ -29,6 +29,7 @@ public class Pantalla extends JFrame {
 
 	public javax.swing.JScrollPane scrollPane;
 	public javax.swing.JButton btnSearch;
+	public javax.swing.JButton btnExtendedSearch;
 	public javax.swing.JLabel lblLucene;
 	public javax.swing.JCheckBox chckbxWikip1;
 	public javax.swing.JCheckBox chckbxWikip2;
@@ -62,19 +63,19 @@ public class Pantalla extends JFrame {
 	public Pantalla() {
 		modelTable= new DefaultTableModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 670, 437);
+		setBounds(100, 100, 670, 452);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		textSearch = new JTextField();
-		textSearch.setBounds(10, 110, 535, 20);
+		textSearch.setBounds(51, 110, 535, 20);
 		contentPane.add(textSearch);
 		textSearch.setColumns(10);
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 141, 634, 237);
+		scrollPane.setBounds(10, 171, 634, 237);
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
@@ -82,7 +83,7 @@ public class Pantalla extends JFrame {
 		
 		btnSearch = new JButton("Buscar");
 		
-		btnSearch.setBounds(555, 109, 89, 23);
+		btnSearch.setBounds(185, 141, 89, 23);
 		contentPane.add(btnSearch);
 		
 		lblLucene = new JLabel("LUCENE");
@@ -105,5 +106,9 @@ public class Pantalla extends JFrame {
 		 chckbxWikig2 = new JCheckBox("wiki-g2");
 		chckbxWikig2.setBounds(431, 80, 97, 23);
 		contentPane.add(chckbxWikig2);
+		
+		btnExtendedSearch = new JButton("B\u00FAsqueda extendida");
+		btnExtendedSearch.setBounds(344, 141, 131, 23);
+		contentPane.add(btnExtendedSearch);
 	}
 }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.es.SpanishAnalyzer;
+import org.apache.lucene.analysis.es.SpanishLightStemmer;
 import org.apache.lucene.analysis.*;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -22,12 +23,14 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.tartarus.snowball.ext.PorterStemmer;
+import org.tartarus.snowball.ext.SpanishStemmer;
 
 public class Searcher {
 	
-	private static Analyzer analyzer = new StandardAnalyzer();
+	//private static Analyzer analyzer = new StandardAnalyzer();
+	private static Analyzer analyzer = new SpanishAnalyzer();
 	private static IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-
 	//private static String index = "C:\\Users\\Carlos\\eclipse-workspace1\\proyecto2_RIT-master\\indexador\\index";
 	
 	// regular search
@@ -35,18 +38,18 @@ public class Searcher {
 	
 
 	private Searcher() {}
-
-	//METODOS
 	
-	public static  ArrayList<String> searchFile(String _queryString,String index) throws IOException, ParseException {
+	//Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_46);
+  
+	public static  ArrayList<Document> searchFile(String _queryString,String index,int _hitsPerPage) throws IOException, ParseException {
 		
 		String field = "texto";
 		String queries = null;
 		int repeat = 0;
 		boolean raw = false;
-		String queryString = _queryString;
+		String queryString = _queryString;// stemming(_queryString);
 		System.out.print("Query : "+queryString+"\n");
-		int hitsPerPage = 20;
+		int hitsPerPage = _hitsPerPage;
 		IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
 		//IMPRIME LOS DATO INDEXADOS PRUEBA-----------------------------------------------
 		/*for (int i=0; i<reader.maxDoc(); i++) {
@@ -69,14 +72,14 @@ public class Searcher {
 
 
 		//********************************************************************************
-		ArrayList<String> listTitle = new ArrayList<String>();
+		ArrayList<Document> listTitle = new ArrayList<Document>();
 		listTitle = doSearch(searcher, query, hitsPerPage);    
 		reader.close();
 		return listTitle;
 	}
 
-	static ArrayList<String> doSearch(IndexSearcher searcher, Query query,int hitsPerPage) throws IOException {
-		ArrayList<String> listTitle = new ArrayList<String>();
+	static ArrayList<Document> doSearch(IndexSearcher searcher, Query query,int hitsPerPage) throws IOException {
+		ArrayList<Document> listTitle = new ArrayList<Document>();
 		
 		listTitle.clear();//revisar
 		
@@ -96,11 +99,11 @@ public class Searcher {
 			Document doc = searcher.doc(hits[i].doc);
 			String title = doc.get("titulo");
 			if (title != null) {
-				listTitle.add(doc.get("titulo"));
+				listTitle.add(doc);
 				System.out.println((i+1) + ". TITULO : " + title);
 				String text = doc.get("texto");
 				if (text != null) {
-					//System.out.println("   TEXTO : " + doc.get("texto"));
+					System.out.println("   TEXTO : " + doc.get("texto"));
 				}
 			} else {
 				System.out.println((i+1) + ". " + "No path for this document");

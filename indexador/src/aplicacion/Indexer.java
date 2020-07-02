@@ -1,7 +1,12 @@
 package aplicacion;
 
+import org.apache.lucene.LucenePackage;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.es.SpanishAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.standard.StandardFilter;
+import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
@@ -12,6 +17,8 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.tartarus.snowball.ext.SpanishStemmer;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,22 +31,25 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.format.TextStyle;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Indexer {
-	private static String indexPath = ".\\index";
+	private static String indexPath ;
 	private static Directory dir;
-	private static Analyzer analyzer = new StandardAnalyzer();
+	//private static Analyzer analyzer = new StandardAnalyzer();
+	private static Analyzer analyzer = new SpanishAnalyzer();
 	private static IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 	private static IndexWriter writer;
-
+	
     private Indexer() {}
 
     /** Indexes a single document */
-    static void createIndex(String path) throws IOException {
+    static void createIndex(String path,String index) throws IOException {
+    	indexPath =  index;
     	Path file = Paths.get(path);
     	dir = FSDirectory.open(Paths.get(indexPath));
     	writer = new IndexWriter(dir, iwc);
@@ -61,7 +71,6 @@ public class Indexer {
 	            Document doc = new Document();
 	            
 	            paginaActual = paginasSeparadas[i];
-	            
 	            Field bodyField = new TextField("texto",FileAnalyzer.sacarBody(paginaActual),Field.Store.YES);
 	            Field refsField = new TextField("ref",FileAnalyzer.sacarRefs(paginaActual),Field.Store.YES);
 	            Field headersField = new TextField("encab",FileAnalyzer.sacarHeaders(paginaActual),Field.Store.YES);
@@ -70,11 +79,12 @@ public class Indexer {
 	            doc.add(bodyField);
 	            System.out.println("bodyField : "+bodyField.toString()+"\n");
 	            doc.add(refsField);
-	            System.out.println("refsField : "+refsField.toString()+"\n");
+	           // System.out.println("refsField : "+refsField.toString()+"\n");
 	            doc.add(headersField);
-	            System.out.println("headersField : "+headersField.toString()+"\n");
+	          //  System.out.println("headersField : "+headersField.toString()+"\n");
 	            doc.add(titleField);
 	            System.out.println("titleField : "+titleField.toString()+"\n");
+	        
 	            
 	            writer.addDocument(doc);
     		}

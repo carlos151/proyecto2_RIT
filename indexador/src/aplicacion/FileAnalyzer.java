@@ -11,12 +11,22 @@ import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.*;
 import org.apache.lucene.analysis.en.PorterStemFilter;
+import org.apache.lucene.analysis.es.SpanishAnalyzer;
+import org.apache.lucene.analysis.es.SpanishLightStemFilter;
+import org.apache.lucene.analysis.es.SpanishLightStemmer;
+import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.util.Version;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.tartarus.snowball.ext.EnglishStemmer;
+import org.tartarus.snowball.ext.SpanishStemmer;
+
+import java.util.StringTokenizer;
+
+
 
 public class FileAnalyzer {
 	private static List<String> stopWords;
@@ -25,22 +35,22 @@ public class FileAnalyzer {
 	
 	public static void fillStopWords() {
 		String stopWordsString = "a " + 
-				"acá " + 
-				"ahí " + 
+				"acÃ¡ " + 
+				"ahÃ­ " + 
 				"ajena " + 
 				"ajenas " + 
 				"ajeno " + 
 				"ajenos " + 
 				"al " + 
 				"algo " + 
-				"algún " + 
+				"algÃºn " + 
 				"alguna " + 
 				"algunas " + 
 				"alguno " + 
 				"algunos " + 
-				"allá " + 
+				"allÃ¡ " + 
 				"alli " + 
-				"allí " + 
+				"allÃ­ " + 
 				"ambos " + 
 				"ampleamos " + 
 				"ante " + 
@@ -51,7 +61,7 @@ public class FileAnalyzer {
 				"aquello " + 
 				"aquellos " + 
 				"aqui " + 
-				"aquí " + 
+				"aquÃ­ " + 
 				"arriba " + 
 				"asi " + 
 				"atras " + 
@@ -68,7 +78,7 @@ public class FileAnalyzer {
 				"cierto " + 
 				"ciertos " + 
 				"como " + 
-				"cómo " + 
+				"cÃ³mo " + 
 				"con " + 
 				"conmigo " + 
 				"conseguimos " + 
@@ -85,20 +95,20 @@ public class FileAnalyzer {
 				"cualquiera " + 
 				"cualquieras " + 
 				"cuan " + 
-				"cuán " + 
+				"cuÃ¡n " + 
 				"cuando " + 
 				"cuanta " + 
-				"cuánta " + 
+				"cuÃ¡nta " + 
 				"cuantas " + 
-				"cuántas " + 
+				"cuÃ¡ntas " + 
 				"cuanto " + 
-				"cuánto " + 
+				"cuÃ¡nto " + 
 				"cuantos " + 
-				"cuántos " + 
+				"cuÃ¡ntos " + 
 				"de " + 
 				"dejar " + 
 				"del " + 
-				"demás " + 
+				"demÃ¡s " + 
 				"demas " + 
 				"demasiada " + 
 				"demasiadas " + 
@@ -109,7 +119,7 @@ public class FileAnalyzer {
 				"donde " + 
 				"dos " + 
 				"el " + 
-				"él " + 
+				"Ã©l " + 
 				"ella " + 
 				"ellas " + 
 				"ello " + 
@@ -172,7 +182,7 @@ public class FileAnalyzer {
 				"intentas " + 
 				"intento " + 
 				"ir " + 
-				"jamás " + 
+				"jamÃ¡s " + 
 				"junto " + 
 				"juntos " + 
 				"la " + 
@@ -181,16 +191,16 @@ public class FileAnalyzer {
 				"lo " + 
 				"los " + 
 				"mas " + 
-				"más " + 
+				"mÃ¡s " + 
 				"me " + 
 				"menos " + 
 				"mi " + 
-				"mía " + 
+				"mÃ­a " + 
 				"mia " + 
 				"mias " + 
 				"mientras " + 
 				"mio " + 
-				"mío " + 
+				"mÃ­o " + 
 				"mios " + 
 				"mis " + 
 				"misma " + 
@@ -200,10 +210,10 @@ public class FileAnalyzer {
 				"modo " + 
 				"mucha " + 
 				"muchas " + 
-				"muchísima " + 
-				"muchísimas " + 
-				"muchísimo " + 
-				"muchísimos " + 
+				"muchÃ­sima " + 
+				"muchÃ­simas " + 
+				"muchÃ­simo " + 
+				"muchÃ­simos " + 
 				"mucho " + 
 				"muchos " + 
 				"muy " + 
@@ -244,7 +254,7 @@ public class FileAnalyzer {
 				"podrian " + 
 				"podrias " + 
 				"por " + 
-				"por qué " + 
+				"por quÃ© " + 
 				"porque " + 
 				"primero " + 
 				"primero desde " + 
@@ -253,10 +263,10 @@ public class FileAnalyzer {
 				"puedo " + 
 				"pues " + 
 				"que " + 
-				"qué " + 
+				"quÃ© " + 
 				"querer " + 
 				"quien " + 
-				"quién " + 
+				"quiÃ©n " + 
 				"quienes " + 
 				"quienesquiera " + 
 				"quienquiera " + 
@@ -272,11 +282,11 @@ public class FileAnalyzer {
 				"segun " + 
 				"ser " + 
 				"si " + 
-				"sí " + 
+				"sÃ­ " + 
 				"siempre " + 
 				"siendo " + 
 				"sin " + 
-				"sín " + 
+				"sÃ­n " + 
 				"sino " + 
 				"so " + 
 				"sobre " + 
@@ -297,7 +307,7 @@ public class FileAnalyzer {
 				"suyos " + 
 				"tal " + 
 				"tales " + 
-				"también " + 
+				"tambiÃ©n " + 
 				"tambien " + 
 				"tampoco " + 
 				"tan " + 
@@ -327,7 +337,7 @@ public class FileAnalyzer {
 				"trabajas " + 
 				"trabajo " + 
 				"tras " + 
-				"tú " + 
+				"tÃº " + 
 				"tu " + 
 				"tus " + 
 				"tuya " + 
@@ -387,7 +397,7 @@ public class FileAnalyzer {
 	}
 	
 	private static String sacarSoloPalabras(String input) {
-		String pattern = "(?<=\\s|^)[A-Za-zÁÉÍÓÚÜáéíóúüÑñ]*(?=[.,;:]?\\s|$)";
+		String pattern = "(?<=\\s|^)[A-Za-zÃ�Ã‰Ã�Ã“ÃšÃœÃ¡Ã©Ã­Ã³ÃºÃ¼Ã‘Ã±]*(?=[.,;:]?\\s|$)";
 	    Pattern r = Pattern.compile(pattern);
 	    Matcher m = r.matcher(input);
 	    String result = "";
@@ -407,7 +417,7 @@ public class FileAnalyzer {
 	public static String sacarBody(String contenido) {
         Document doc = Jsoup.parse(contenido,"UTF-8");
         String body = doc.body().text();
-        return removeStopWords(sacarSoloPalabras(body));
+        return stemming(removeStopWords(sacarSoloPalabras(body)));
 		
 	}
 	
@@ -421,7 +431,7 @@ public class FileAnalyzer {
 	public static String sacarHeaders(String contenido) {
 		Document doc = Jsoup.parse(contenido,"UTF-8");
 		String headers = doc.select("h1, h2, h3, h4, h5, h6, h7, h8, h9").text();
-		return removeStopWords(sacarSoloPalabras(headers));
+		return stemming(removeStopWords(sacarSoloPalabras(headers)));
 		
 	}
 
@@ -432,4 +442,30 @@ public class FileAnalyzer {
 	
 	}
 
+	public static String stemmingWord(String word) {
+		SpanishStemmer stem = new SpanishStemmer();
+		stem.setCurrent(word);
+		stem.stem();
+		String result = stem.getCurrent();
+		return result;
+	}
+		
+	public static String stemming(String textField) {
+		String text="";
+		String[] result = textField.split(" ");
+	    for (int x=0; x<result.length; x++){
+	       	text=text+" "+FileAnalyzer.stemmingWord(result[x]);
+	        //System.out.println(FileAnalyzer.stemmingWord(result[x]));
+	    }
+	    //System.out.println("STEMMING TEXFIELD: >>>"+text);
+	    return text;
+	}
+
+		 
+		
+		
+		
+		
+		
+		
 }
