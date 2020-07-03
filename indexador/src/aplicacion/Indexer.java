@@ -44,7 +44,7 @@ public class Indexer {
 	private static Analyzer analyzer = new SpanishAnalyzer();
 	//private static IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 	//private static IndexWriter writer;
-	private static long TInicio, TFin, tiempo; //Variables para determinar el tiempo de ejecución
+	private static long TInicio, TFin, tiempo; //Variables para determinar el tiempo de ejecuciï¿½n
 	
     private Indexer() {}
 
@@ -54,6 +54,7 @@ public class Indexer {
     	TInicio = System.currentTimeMillis(); //Tomamos la hora en que inicio el algoritmo y la almacenamos en la variable inicio
     	
     	IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+    	iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
     	IndexWriter writer;
     	indexPath =  index;
     	Path file = Paths.get(path);
@@ -72,7 +73,7 @@ public class Indexer {
     	String[] paginasSeparadas = docToString.split("<html");
     	String paginaActual;
     	
-    	System.out.println("Número de páginas : "+paginasSeparadas.length);
+    	System.out.println("Nï¿½mero de pï¿½ginas : "+paginasSeparadas.length);
     	
     	try (InputStream stream = Files.newInputStream(file)) {
     		for(int i = 0; i < paginasSeparadas.length; i++) {
@@ -98,9 +99,9 @@ public class Indexer {
         }
     	writer.close();
     	
-    	TFin = System.currentTimeMillis(); //Tomamos la hora en que finalizó el algoritmo y la almacenamos en la variable T
+    	TFin = System.currentTimeMillis(); //Tomamos la hora en que finalizï¿½ el algoritmo y la almacenamos en la variable T
     	tiempo = TFin - TInicio; //Calculamos los milisegundos de diferencia
-    	System.out.println("Tiempo de indexado de "+ path +" en milisegundos: " + tiempo); //Mostramos en pantalla el tiempo de ejecución en milisegundos
+    	System.out.println("Tiempo de indexado de "+ path +" en milisegundos: " + tiempo); //Mostramos en pantalla el tiempo de ejecuciï¿½n en milisegundos
     	System.out.println("********** FIN DEL INDEXADO **********"); 
     }
     

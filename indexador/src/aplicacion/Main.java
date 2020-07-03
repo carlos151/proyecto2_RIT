@@ -22,11 +22,11 @@ public class Main{
         FileAnalyzer.fillStopWords(); //crear la lista estatica de stopwords
         
     	String indexp1 = ".\\indexp1";//".\\index"
-    	//String indexp2 = ".\\indexp2";
+    	String indexp2 = ".\\indexp2";
     	//String indexg1 = ".\\indexg1";
     	//String indexg2 = ".\\indexg2";
     	Indexer.createIndex(".\\archivos\\wiki-p1.txt",indexp1);
-    	//Indexer.createIndex(".\\archivos\\wiki-p2.txt",indexp2);
+    	Indexer.createIndex(".\\archivos\\wiki-p2.txt",indexp1);
     	//Indexer.createIndex(".\\archivos\\wiki-g1.txt",indexg1);
     	//Indexer.createIndex(".\\archivos\\wiki-g2.txt",indexg2);
         
