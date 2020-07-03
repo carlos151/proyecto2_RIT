@@ -1,7 +1,13 @@
 package aplicacion;
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
@@ -112,4 +118,41 @@ public class Searcher {
 		}
 		return listTitle;
 	}
+	
+	
+	public static void abrirPagina(String titulo,String refs,String coleccion) throws IOException {
+		InputStream is = new FileInputStream(".\\archivos\\" + coleccion); 
+    	BufferedReader buf = new BufferedReader(new InputStreamReader(is)); 
+    	String line = buf.readLine(); 
+    	StringBuilder sb = new StringBuilder(); 
+    	while(line != null){ 
+    		sb.append(line).append("\n"); line = buf.readLine(); 
+    	} 
+    	String docToString = sb.toString();
+    	String[] paginasSeparadas = docToString.split("<html");
+    	for(int i=0; i < paginasSeparadas.length;i++) {
+    		paginasSeparadas[i] = "<html" + paginasSeparadas[i];
+    		String[] separarLineas = paginasSeparadas[i].split("\n");
+    		String lineaCache = "";
+    		for(int j=0; j < separarLineas.length-1;j++) {
+    			lineaCache += separarLineas[j]+"\n";
+    		}
+    		paginasSeparadas[i] = lineaCache;
+    	}
+    	String paginaBuscada = "";
+    	for(String pagina:paginasSeparadas) {
+    		String referencias = " "+FileAnalyzer.sacarRefs(pagina);
+    		if(FileAnalyzer.sacarTitle(pagina).equals(titulo+" ") && referencias.equals(refs+" ")) {
+    			paginaBuscada = pagina;
+    			break;
+    		}
+    	}
+    	File htmlFile = new File(".\\" + titulo + ".html");
+    	FileWriter fileWriter = new FileWriter(titulo+".html");
+    	fileWriter.write(paginaBuscada);
+    	fileWriter.close();
+    	Desktop desktop = Desktop.getDesktop();
+    	desktop.open(htmlFile);
+	}
+	
 }

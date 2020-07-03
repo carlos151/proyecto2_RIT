@@ -6,10 +6,10 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Carlos PR/Downloads/jsoup-1.13.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Carlos PR/Downloads/lucene-analyzers-common-5.5.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Carlos PR/Downloads/lucene-core-5.0.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Carlos PR/Downloads/lucene-demo-5.0.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Carlos PR/Downloads/lucene-queryparser-5.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Carlos/Desktop/lucene-5.0.0/jsoup-1.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Carlos/Desktop/lucene-5.0.0/lucene-analyzers-common-5.5.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Carlos/Desktop/lucene-5.0.0/lucene-core-5.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Carlos/Desktop/lucene-5.0.0/lucene-demo-5.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Carlos/Desktop/lucene-5.0.0/lucene-queryparser-5.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

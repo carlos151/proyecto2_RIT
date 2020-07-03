@@ -21,12 +21,21 @@ public class PantallaController implements ActionListener,ListSelectionListener{
 	private Pantalla vista;
 	private ArrayList<Document> listaDocs;	
 	
-	String index = ".\\\\indexp1";//"C:.\\index"
+	String index = ".\\indexp1";//"C:.\\index"
 	
 	String indexp1 = ".\\indexp1";//".\\index"
 	String indexp2 = ".\\indexp2";
 	String indexg1 = ".\\indexg1";
 	String indexg2 = ".\\indexg2";
+	
+	String wiki = "wiki-p1.txt";
+	
+	String wikip1 = "wiki-p1.txt";
+	String wikip2 = "wiki-p2.txt";
+	String wikig1 = "wiki-g1.txt";
+	String wikig2 = "wiki-g2.txt";
+	
+	
 	
 	public PantallaController(Pantalla _vista) {
 		this.vista=_vista;
@@ -61,24 +70,28 @@ public class PantallaController implements ActionListener,ListSelectionListener{
         	extenderTabla(query);
         }else if (e.getSource() == vista.chckbxWikig1) {
         	 index = indexg1;
+        	 wiki = wikig1;
         	// vista.chckbxWikig1.setSelected(true);
              vista.chckbxWikig2.setSelected(false);
              vista.chckbxWikip1.setSelected(false);
              vista.chckbxWikip2.setSelected(false);
         }else if (e.getSource() == vista.chckbxWikig2) {
         	index = indexg2;
+        	wiki = wikig2;
         	vista.chckbxWikig1.setSelected(false);
            // vista.chckbxWikig2.setSelected(true);
             vista.chckbxWikip1.setSelected(false);
             vista.chckbxWikip2.setSelected(false);
         }else if (e.getSource() == vista.chckbxWikip1) {
         	index = indexp1;
+        	wiki = wikip1;
         	vista.chckbxWikig1.setSelected(false);
             vista.chckbxWikig2.setSelected(false);      
            // vista.chckbxWikip1.setSelected(false);
             vista.chckbxWikip2.setSelected(false);
         }else if (e.getSource() == vista.chckbxWikip2) {
         	index = indexp2;
+        	wiki = wikip2;
         	vista.chckbxWikig1.setSelected(false);
             vista.chckbxWikig2.setSelected(false);
             vista.chckbxWikip1.setSelected(false);
@@ -101,6 +114,14 @@ public class PantallaController implements ActionListener,ListSelectionListener{
             System.out.println("REFERENCIA: "+this.listaDocs.get(vista.table.getSelectedRow()).get("ref"));
             System.out.println("TEXTO: "+this.listaDocs.get(vista.table.getSelectedRow()).get("texto"));
             System.out.println("********************************************"); 
+            try {
+				Searcher.abrirPagina(this.listaDocs.get(vista.table.getSelectedRow()).get("titulo"), this.listaDocs.get(vista.table.getSelectedRow()).get("ref"),wiki);
+            	//Searcher.abrirPagina("alon harazi wikipedia la enciclopedia libre "," alon harazi wikipedi enciclopedi libr curi views navegaciã³n busc idiom",wiki);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+            
         }
 	}
     
